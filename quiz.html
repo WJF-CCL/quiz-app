@@ -24,24 +24,27 @@
         /* 移动端优化 */
         @media (max-width: 768px) {
             body {
-                padding: 10px;
+                padding: 0;
             }
             
             .container {
-                border-radius: 10px;
-                box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+                max-width: 100%;
+                border-radius: 0;
+                box-shadow: none;
+                margin: 0;
             }
             
             .header {
                 padding: 20px 15px;
+                border-radius: 0;
             }
             
             .header h1 {
-                font-size: 22px;
+                font-size: 20px;
             }
             
             .content {
-                padding: 20px 15px;
+                padding: 15px;
             }
             
             .login-form {
@@ -51,19 +54,21 @@
             .quiz-info {
                 flex-direction: column;
                 gap: 10px;
-                padding: 15px;
+                padding: 12px;
             }
             
             .quiz-info span {
-                font-size: 14px;
+                font-size: 13px;
             }
             
             .question-card {
-                padding: 20px 15px;
+                padding: 15px;
+                margin-bottom: 15px;
             }
             
             .question-stem {
                 font-size: 16px;
+                line-height: 1.5;
             }
             
             .option-item label {
@@ -78,15 +83,17 @@
                 border-radius: 20px;
                 margin-bottom: 15px;
                 font-size: 16px;
+                display: inline-block;
             }
             
             .result-header {
                 padding: 25px 15px;
+                border-radius: 0;
             }
             
             .result-user-info {
                 flex-direction: column;
-                align-items: flex-start;
+                align-items: stretch;
             }
             
             .user-info-item {
@@ -104,6 +111,11 @@
             
             .result-item {
                 padding: 15px;
+            }
+            
+            .section-title {
+                font-size: 18px;
+                margin: 20px 0 12px 0;
             }
         }
         .header {
