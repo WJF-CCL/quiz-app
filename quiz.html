@@ -12,6 +12,9 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 0;
+            margin: 0;
+            width: 100%;
+            overflow-x: hidden;
         }
         .container {
             max-width: 900px;
@@ -24,23 +27,32 @@
         
         /* 移动端优化 */
         @media (max-width: 768px) {
+            * {
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            
             body {
-                padding: 0;
-                margin: 0;
+                padding: 0 !important;
+                margin: 0 !important;
+                width: 100vw !important;
+                overflow-x: hidden !important;
             }
             
             .container {
-                width: 100vw;
-                max-width: 100vw;
-                border-radius: 0;
-                box-shadow: none;
-                margin: 0;
-                overflow-x: hidden;
+                width: 100vw !important;
+                max-width: 100vw !important;
+                border-radius: 0 !important;
+                box-shadow: none !important;
+                margin: 0 !important;
+                overflow-x: hidden !important;
+                padding: 0 !important;
             }
             
             .header {
-                padding: 20px 15px;
-                border-radius: 0;
+                padding: 20px 10px !important;
+                border-radius: 0 !important;
+                margin: 0 !important;
             }
             
             .header h1 {
@@ -52,7 +64,8 @@
             }
             
             .content {
-                padding: 15px;
+                padding: 10px !important;
+                margin: 0 !important;
             }
             
             .login-form {
@@ -62,7 +75,8 @@
             .quiz-info {
                 flex-direction: column;
                 gap: 10px;
-                padding: 12px;
+                padding: 10px !important;
+                margin: 0 !important;
             }
             
             .quiz-info span {
@@ -70,8 +84,8 @@
             }
             
             .question-card {
-                padding: 15px;
-                margin-bottom: 15px;
+                padding: 12px !important;
+                margin-bottom: 12px !important;
             }
             
             .question-stem {
@@ -80,33 +94,36 @@
             }
             
             .option-item label {
-                padding: 12px;
+                padding: 10px !important;
             }
             
             .timer {
                 position: static;
                 background: #667eea;
                 color: white;
-                padding: 8px 15px;
+                padding: 8px 12px;
                 border-radius: 20px;
-                margin-bottom: 15px;
+                margin-bottom: 12px;
                 font-size: 16px;
                 display: inline-block;
             }
             
             .result-header {
-                padding: 25px 15px;
-                border-radius: 0;
+                padding: 20px 10px !important;
+                border-radius: 0 !important;
+                margin: 0 !important;
             }
             
             .result-user-info {
                 flex-direction: column;
                 align-items: stretch;
+                gap: 8px;
             }
             
             .user-info-item {
                 width: 100%;
-                padding: 12px 15px;
+                padding: 10px !important;
+                margin: 0 !important;
             }
             
             .score-value {
@@ -114,16 +131,18 @@
             }
             
             .score-detail {
-                gap: 20px;
+                gap: 15px;
             }
             
             .result-item {
-                padding: 15px;
+                padding: 12px !important;
+                margin-bottom: 12px !important;
             }
             
             .section-title {
                 font-size: 18px;
-                margin: 20px 0 12px 0;
+                margin: 15px 0 10px 0 !important;
+                padding-bottom: 8px !important;
             }
         }
         .header {
