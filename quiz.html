@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>班组长考试题库 - 在线答题平台</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 { font-size: 28px; margin-bottom: 10px; }
+        .header p { font-size: 14px; opacity: 0.9; }
+        .content { padding: 40px; }
+        .login-form { max-width: 400px; margin: 0 auto; }
+        .form-group { margin-bottom: 25px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: bold; color: #333; }
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus { outline: none; border-color: #667eea; }
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4); }
+        .quiz-section { display: none; }
+        .quiz-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .quiz-info span { font-size: 16px; color: #555; }
+        .question-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border-left: 5px solid #667eea;
+        }
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .question-number {
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        .question-type {
+            background: #e0e0e0;
+            color: #555;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+        .question-stem { font-size: 18px; line-height: 1.6; margin-bottom: 20px; color: #333; }
+        .options-list { list-style: none; }
+        .option-item { margin-bottom: 12px; }
+        .option-item label {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .option-item label:hover { border-color: #667eea; background: #f8f9fa; }
+        .option-item input[type="radio"], .option-item input[type="checkbox"] {
+            margin-right: 15px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        .option-letter {
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        .result-section { display: none; }
+        .result-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+        .result-user-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .user-info-item {
+            background: rgba(255,255,255,0.2);
+            padding: 15px 25px;
+            border-radius: 10px;
+        }
+        .user-info-item label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-right: 10px;
+        }
+        .user-info-item span {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .score-display {
+            text-align: center;
+            padding: 30px;
+        }
+        .score-label {
+            font-size: 20px;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+        .score-value {
+            font-size: 96px;
+            font-weight: bold;
+            line-height: 1;
+        }
+        .score-unit {
+            font-size: 32px;
+            opacity: 0.8;
+        }
+        .score-detail {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 30px;
+        }
+        .score-item {
+            text-align: center;
+        }
+        .score-item .label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+        .score-item .value {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .score-item.correct .value { color: #4ade80; }
+        .score-item.wrong .value { color: #f87171; }
+        .result-details { margin-top: 30px; }
+        .result-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 5px solid;
+        }
+        .result-item.correct { border-left-color: #28a745; }
+        .result-item.wrong { border-left-color: #dc3545; }
+        .result-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .result-status {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .result-status.correct { background: #28a745; color: white; }
+        .result-status.wrong { background: #dc3545; color: white; }
+        .correct-answer {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .your-answer {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .restart-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 30px;
+            width: 100%;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s;
+        }
+        .timer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            font-size: 18px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #667eea;
+            margin: 30px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+        .print-btn {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            padding: 10px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        .print-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+        @media print {
+            .timer, .btn, .restart-btn, .print-btn { display: none; }
+            body { background: white; }
+            .container { box-shadow: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>班组长考试题库</h1>
+            <p>在线答题平台 - 满分 100 分</p>
+        </div>
+        <div class="content">
+            <!-- 登录页面 -->
+            <div id="loginSection" class="login-form">
+                <h2 style="text-align: center; margin-bottom: 30px; color: #333;">个人信息</h2>
+                <div class="form-group">
+                    <label for="username">姓名 *</label>
+                    <input type="text" id="username" placeholder="请输入您的姓名" required>
+                </div>
+                <div class="form-group">
+                    <label for="department">部门/班组 *</label>
+                    <input type="text" id="department" placeholder="请输入您的部门或班组" required>
+                </div>
+                <div class="form-group">
+                    <label for="employeeId">工号</label>
+                    <input type="text" id="employeeId" placeholder="请输入您的工号（可选）">
+                </div>
+                <button class="btn" onclick="startQuiz()">开始答题</button>
+            </div>
+            
+            <!-- 答题页面 -->
+            <div id="quizSection" class="quiz-section">
+                <div class="timer" id="timer">00:00</div>
+                <div class="progress-bar"><div class="progress-fill" id="progressBar"></div></div>
+                <div class="quiz-info">
+                    <span>答题人：<strong id="quizUsername"></strong></span>
+                    <span>进度：<strong id="questionProgress">0/10</strong></span>
+                    <span>总分：<strong id="currentScore">0/100</strong></span>
+                </div>
+                <div id="questionsContainer"></div>
+                <button class="btn" onclick="submitQuiz()">提交答案</button>
+            </div>
+            
+            <!-- 结果页面 -->
+            <div id="resultSection" class="result-section">
+                <div class="result-header">
+                    <div class="result-user-info">
+                        <div class="user-info-item">
+                            <label>答题人：</label>
+                            <span id="resultUsername"></span>
+                        </div>
+                        <div class="user-info-item">
+                            <label>部门/班组：</label>
+                            <span id="resultDepartment"></span>
+                        </div>
+                        <div class="user-info-item">
+                            <label>工号：</label>
+                            <span id="resultEmployeeId">-</span>
+                        </div>
+                        <div class="user-info-item">
+                            <label>答题时间：</label>
+                            <span id="resultTime"></span>
+                        </div>
+                    </div>
+                    <div class="score-display">
+                        <div class="score-label">最终得分</div>
+                        <div class="score-value" id="finalScore">0</div>
+                        <div class="score-unit">/ 100 分</div>
+                        <div class="score-detail">
+                            <div class="score-item correct">
+                                <div class="label">答对题数</div>
+                                <div class="value" id="correctCount">0</div>
+                            </div>
+                            <div class="score-item wrong">
+                                <div class="label">答错题数</div>
+                                <div class="value" id="wrongCount">0</div>
+                            </div>
+                            <div class="score-item">
+                                <div class="label">正确率</div>
+                                <div class="value" id="correctRate">0%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="result-details" id="resultDetails"></div>
+                <button class="print-btn" onclick="window.print()">🖨️ 打印结果</button>
+                <button class="restart-btn" onclick="restartQuiz()">再次答题</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 题库数据
+        const allQuestions = [
+            {"id":1,"stem":"2017 年 10 月 18 日，习近平总书记在党的十九大报告中指出，必须坚持人民（ ），坚持立党为公、执政为民，践行全心全意为人民服务的根本宗旨。","type":"单选","score":10,"difficulty":"低","answer":"B","options":{"A":"重要地位","B":"主体地位","C":"特殊地位","D":"首要地位"}},
+            {"id":2,"stem":"PDCA 循环中 D 指的是（ ）","type":"单选","score":10,"difficulty":"低","answer":"B","options":{"A":"计划","B":"实施","C":"检查","D":"处置"}},
+            {"id":3,"stem":"班组长是班组安全检查的第一责任人，班组安全员是班组安全检查的（ ）。","type":"单选","score":10,"difficulty":"低","answer":"B","options":{"A":"第一责任人","B":"执行人、监督人","C":"执行人","D":"监督人"}},
+            {"id":4,"stem":"从中国社会的发展进程看，创新孕育兴旺发达，守旧导致苦难屈辱。中华民族是一个富有（ ）的民族。","type":"单选","score":10,"difficulty":"低","answer":"B","options":{"A":"勤快刻苦和发明能力","B":"创新精神和创新能力","C":"忍辱负重和中庸之道","D":"以上都不是"}},
+            {"id":5,"stem":"生产经营单位的主要负责人未履行新安全生产法规定的安全生产管理职责的，责令限期改正，处 2 万元以上（ ）万元以下的罚款。","type":"单选","score":10,"difficulty":"低","answer":"C","options":{"A":"3","B":"4","C":"5","D":"10"}},
+            {"id":6,"stem":"加强国防和军队建设重大任务战建备统筹，加快建设（）后勤。","type":"单选","score":10,"difficulty":"低","answer":"B","options":{"A":"智能化","B":"现代化","C":"高效化","D":"数字化"}},
+            {"id":7,"stem":"员工看到的企业内部的变化通常是由（ ）引发的。","type":"单选","score":10,"difficulty":"低","answer":"A","options":{"A":"企业内部的结构","B":"企业重组","C":"技术进步","D":"外部因素"}},
+            {"id":8,"stem":"开展新就业形态劳动者入会集中行动，新增新就业形态劳动者会员（）余人。","type":"单选","score":10,"difficulty":"低","answer":"D","options":{"A":"850 万","B":"972 万","C":"1015 万","D":"1227 万"}},
+            {"id":9,"stem":"班组长在组织管理素质方面应善于观察分析职工的（ ）。","type":"单选","score":10,"difficulty":"低","answer":"A","options":{"A":"思想状况","B":"工作状况","C":"家庭状况","D":"政治状况"}},
+            {"id":10,"stem":"目标管理的优势是（ ）。","type":"单选","score":10,"difficulty":"低","answer":"D","options":{"A":"明确组织的目标与任务","B":"改进或优化基层管理","C":"有助于提升全员士气","D":"以上都是"}},
+            {"id":11,"stem":"党的思想路线是一切从（）出发，理论联系实际，实事求是。","type":"单选","score":10,"difficulty":"低","answer":"A","options":{"A":"实际","B":"实践","C":"人民","D":"稳定"}},
+            {"id":12,"stem":"对职工应休未休的年休假天数，单位应当按照该职工日工资收入的（ ）支付年休假工资报酬。","type":"单选","score":10,"difficulty":"低","answer":"D","options":{"A":"1.2","B":"1.5","C":"2","D":"3"}},
+            {"id":13,"stem":"四措是保证安全的（ ）措施。","type":"单选","score":10,"difficulty":"低","answer":"A","options":{"A":"技术","B":"防护","C":"临时","D":"组织"}},
+            {"id":14,"stem":"未经培训的普通工人不允许安排成为替代技术工人，是（ ）的安全职责。","type":"单选","score":10,"difficulty":"低","answer":"D","options":{"A":"人事、劳资部门","B":"安全专职机构","C":"技术部门","D":"生产部门"}},
+            {"id":15,"stem":"工会组长是班组（ ）的组织者和主持人。","type":"单选","score":10,"difficulty":"低","answer":"B","options":{"A":"民主监督","B":"民主管理","C":"个人管理","D":"企业管理"}},
+            {"id":16,"stem":"振兴中华，最早是（ ）提出来的。","type":"单选","score":10,"difficulty":"低","answer":"B","options":{"A":"毛泽东","B":"孙中山","C":"邓小平","D":"周恩来"}},
+            {"id":17,"stem":"绩效管理的中坚力量是（ ）。","type":"单选","score":10,"difficulty":"低","answer":"C","options":{"A":"高层领导","B":"一般员工","C":"直接上级/主管","D":"人力资源部人员"}},
+            {"id":18,"stem":"各单位（ ）应定期检查和督促安全性评价部门整改计划完成情况。","type":"单选","score":10,"difficulty":"低","answer":"C","options":{"A":"每周","B":"每月","C":"每季度","D":"每年"}},
+            {"id":19,"stem":"生产经营单位对（ ）应当登记建档，定期检测、评估、监控。","type":"单选","score":10,"difficulty":"低","answer":"C","options":{"A":"事故频发场所","B":"重大事故隐患","C":"重大危险源","D":"重点危险部位"}},
+            {"id":20,"stem":"班组计划管理的效果评估主要依据是（ ）。","type":"单选","score":10,"difficulty":"低","answer":"C","options":{"A":"班组长的感觉","B":"员工的反馈","C":"生产数据","D":"市场反馈"}},
+            {"id":21,"stem":"施工现场发生火情时，应先切断电源，再使用灭火器灭火。（ ）使用水或泡沫灭火器。","type":"单选","score":10,"difficulty":"低","answer":"C","options":{"A":"可以","B":"不宜","C":"不得","D":"视情况而定"}},
+            {"id":22,"stem":"生产现场大多数对象物与人处于（ ）的状态。","type":"单选","score":10,"difficulty":"低","answer":"B","options":{"A":"直接结合、间接结合","B":"间接结合、直接结合","C":"不结合、间接结合","D":"不结合、直接结合"}},
+            {"id":23,"stem":"物联网架构可分为三层：感知层、（ ）和应用层。","type":"单选","score":10,"difficulty":"低","answer":"A","options":{"A":"网络层","B":"工具层","C":"数据层","D":"识别层"}},
+            {"id":24,"stem":"强制保养制的特点是（ ）。","type":"单选","score":10,"difficulty":"低","answer":"C","options":{"A":"根据设备实际情况灵活调整","B":"只在设备出现故障时进行","C":"定期按计划进行无条件的检查和维护","D":"仅对特种设备实施"}},
+            {"id":25,"stem":"当发现有人触电时，首先要（ ）电源或用绝缘材料将带电体与触电者分离开。","type":"单选","score":10,"difficulty":"低","answer":"B","options":{"A":"闭合","B":"切断","C":"开关","D":"以上都不是"}},
+            {"id":26,"stem":"若一个属性可以从其他属性中推演出来，那这个属性就是（ ）。","type":"单选","score":10,"difficulty":"低","answer":"B","options":{"A":"结构属性","B":"冗余属性","C":"模式属性","D":"集成属性"}},
+            {"id":27,"stem":"生产经营单位必须执行依法制定的保障安全生产的（ ）。","type":"单选","score":10,"difficulty":"低","answer":"B","options":{"A":"行业标准","B":"国家标准或者行业标准","C":"地方标准","D":"单位标准"}},
+            {"id":28,"stem":"在安全管理中，（ ）比较重要。","type":"单选","score":10,"difficulty":"低","answer":"B","options":{"A":"发防暑降温费","B":"安全培训和教育","C":"探望负伤人员家属","D":"以上都不是"}},
+            {"id":29,"stem":"设备完好率评定指标（ ）级设备是能达到铭牌出力，可以安全运行。","type":"单选","score":10,"difficulty":"低","answer":"B","options":{"A":"一","B":"二","C":"三","D":"以上都不是"}},
+            {"id":30,"stem":"司机在操作中接近人时，应给以断续铃声或（ ）。","type":"单选","score":10,"difficulty":"低","answer":"B","options":{"A":"连续铃声","B":"报警","C":"声光信号","D":"以上都不是"}},
+            {"id":403,"stem":"班组建设中普遍适用的七大机制包括（）。","type":"多选","score":10,"difficulty":"中","answer":"ABD","options":{"A":"班组赛马机制","B":"班组荣誉机制","C":"班组私藏机制","D":"班组轮值机制"}},
+            {"id":404,"stem":"核心价值观说明组织（）等问题。","type":"多选","score":10,"difficulty":"中","answer":"BC","options":{"A":"完成计划的措施","B":"代表什么","C":"处事的原则是什么","D":"要实现什么"}},
+            {"id":408,"stem":"五型班组包括技能型、安全型、（）。","type":"多选","score":10,"difficulty":"中","answer":"ABD","options":{"A":"效益型","B":"创新型","C":"奋斗型","D":"和谐型"}},
+            {"id":420,"stem":"设备润滑五定是（ ）。","type":"多选","score":10,"difficulty":"中","answer":"ABCDE","options":{"A":"定点","B":"定质","C":"定量","D":"定时","E":"定人"}}
+        ];
+
+        let currentQuestions = [];
+        let userAnswers = {};
+        let userInfo = {};
+        let timerInterval;
+        let seconds = 0;
+
+        // 按题型顺序抽取题目
+        function getRandomQuestionsByType(total, count) {
+            const singleChoice = total.filter(q => q.type === '单选');
+            const multipleChoice = total.filter(q => q.type === '多选');
+            const shuffledSingle = [...singleChoice].sort(() => 0.5 - Math.random());
+            const shuffledMultiple = [...multipleChoice].sort(() => 0.5 - Math.random());
+            const multipleCount = Math.min(2, shuffledMultiple.length);
+            const singleCount = count - multipleCount;
+            const selectedSingle = shuffledSingle.slice(0, singleCount);
+            const selectedMultiple = shuffledMultiple.slice(0, multipleCount);
+            return [...selectedSingle, ...selectedMultiple];
+        }
+
+        // 开始答题
+        function startQuiz() {
+            const username = document.getElementById('username').value.trim();
+            const department = document.getElementById('department').value.trim();
+            const employeeId = document.getElementById('employeeId').value.trim();
+
+            if (!username || !department) {
+                alert('请填写姓名和部门/班组！');
+                return;
+            }
+
+            userInfo = { username, department, employeeId };
+            currentQuestions = getRandomQuestionsByType(allQuestions, 10);
+            userAnswers = {};
+            seconds = 0;
+
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('quizSection').style.display = 'block';
+            document.getElementById('quizUsername').textContent = username;
+
+            renderQuestions();
+            startTimer();
+        }
+
+        // 渲染题目
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+            const singleChoiceQuestions = currentQuestions.filter(q => q.type === '单选');
+            const multipleChoiceQuestions = currentQuestions.filter(q => q.type === '多选');
+            let questionIndex = 1;
+
+            if (singleChoiceQuestions.length > 0) {
+                const singleTitle = document.createElement('div');
+                singleTitle.className = 'section-title';
+                singleTitle.textContent = '一、单选题（每题 10 分）';
+                container.appendChild(singleTitle);
+                singleChoiceQuestions.forEach((q) => {
+                    container.appendChild(createQuestionCard(q, questionIndex++));
+                });
+            }
+
+            if (multipleChoiceQuestions.length > 0) {
+                const multipleTitle = document.createElement('div');
+                multipleTitle.className = 'section-title';
+                multipleTitle.textContent = '二、多选题（每题 10 分）';
+                container.appendChild(multipleTitle);
+                multipleChoiceQuestions.forEach((q) => {
+                    container.appendChild(createQuestionCard(q, questionIndex++));
+                });
+            }
+            updateProgress();
+        }
+
+        // 创建题目卡片
+        function createQuestionCard(q, index) {
+            const isMultiple = q.type === '多选';
+            const inputType = isMultiple ? 'checkbox' : 'radio';
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            let optionsHtml = '';
+            for (const [key, value] of Object.entries(q.options)) {
+                optionsHtml += `
+                    <li class="option-item">
+                        <label>
+                            <div class="option-letter">${key}</div>
+                            <input type="${inputType}" name="q${q.id}" value="${key}" onchange="saveAnswer(${q.id}, '${key}', '${inputType}')">
+                            <span>${value}</span>
+                        </label>
+                    </li>
+                `;
+            }
+            card.innerHTML = `
+                <div class="question-header">
+                    <span class="question-number">第 ${index} 题</span>
+                    <span class="question-type">${q.type} · ${q.score}分</span>
+                </div>
+                <div class="question-stem">${q.stem}</div>
+                <ul class="options-list">${optionsHtml}</ul>
+            `;
+            return card;
+        }
+
+        // 保存答案
+        function saveAnswer(questionId, value, inputType) {
+            if (!userAnswers[questionId]) {
+                userAnswers[questionId] = [];
+            }
+            if (inputType === 'radio') {
+                userAnswers[questionId] = [value];
+            } else {
+                const index = userAnswers[questionId].indexOf(value);
+                if (index > -1) {
+                    userAnswers[questionId].splice(index, 1);
+                } else {
+                    userAnswers[questionId].push(value);
+                }
+            }
+            updateProgress();
+        }
+
+        // 更新进度
+        function updateProgress() {
+            const answered = Object.keys(userAnswers).length;
+            document.getElementById('questionProgress').textContent = answered + '/10';
+            document.getElementById('progressBar').style.width = (answered / 10 * 100) + '%';
+        }
+
+        // 计时器
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                seconds++;
+                const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+                const secs = (seconds % 60).toString().padStart(2, '0');
+                document.getElementById('timer').textContent = mins + ':' + secs;
+            }, 1000);
+        }
+
+        // 提交答案
+        function submitQuiz() {
+            const answered = Object.keys(userAnswers).length;
+            if (answered < 10) {
+                if (!confirm('你还有' + (10 - answered) + '道题未答，确定要提交吗？')) {
+                    return;
+                }
+            }
+            clearInterval(timerInterval);
+            showResults();
+        }
+
+        // 显示结果 - 跳转到新界面
+        function showResults() {
+            let totalScore = 0;
+            let correctCount = 0;
+            const resultDetails = document.getElementById('resultDetails');
+            resultDetails.innerHTML = '';
+
+            // 计算成绩
+            currentQuestions.forEach((q, index) => {
+                const userAnswer = userAnswers[q.id] || [];
+                const userAnswerStr = userAnswer.slice().sort().join('');
+                const correctAnswer = q.answer;
+                const isCorrect = userAnswerStr === correctAnswer;
+                if (isCorrect) {
+                    totalScore += q.score;
+                    correctCount++;
+                }
+            });
+
+            const wrongCount = 10 - correctCount;
+            const correctRate = Math.round(correctCount / 10 * 100);
+
+            // 填充答题人信息到结果页面
+            document.getElementById('resultUsername').textContent = userInfo.username;
+            document.getElementById('resultDepartment').textContent = userInfo.department;
+            document.getElementById('resultEmployeeId').textContent = userInfo.employeeId || '-';
+            
+            // 显示答题时间
+            const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const secs = (seconds % 60).toString().padStart(2, '0');
+            document.getElementById('resultTime').textContent = mins + ':' + secs;
+
+            // 填充分数信息
+            document.getElementById('finalScore').textContent = totalScore;
+            document.getElementById('correctCount').textContent = correctCount;
+            document.getElementById('wrongCount').textContent = wrongCount;
+            document.getElementById('correctRate').textContent = correctRate + '%';
+
+            // 生成答题记录
+            currentQuestions.forEach((q, index) => {
+                const userAnswer = userAnswers[q.id] || [];
+                const userAnswerStr = userAnswer.slice().sort().join('');
+                const correctAnswer = q.answer;
+                const isCorrect = userAnswerStr === correctAnswer;
+                const statusClass = isCorrect ? 'correct' : 'wrong';
+                const statusText = isCorrect ? '✓ 正确' : '✗ 错误';
+                const yourAnswerText = userAnswer.length > 0 ? userAnswer.slice().sort().join('') : '未作答';
+
+                const resultItem = document.createElement('div');
+                resultItem.className = 'result-item ' + statusClass;
+                resultItem.innerHTML = `
+                    <div class="result-item-header">
+                        <strong>第 ${index + 1} 题</strong>
+                        <span class="result-status ${statusClass}">${statusText}</span>
+                    </div>
+                    <div class="question-stem" style="font-size: 16px; margin-bottom: 10px;">${q.stem}</div>
+                    <div class="correct-answer">正确答案：${correctAnswer}</div>
+                    <div class="your-answer">你的答案：${yourAnswerText}</div>
+                `;
+                resultDetails.appendChild(resultItem);
+            });
+
+            // 跳转到结果界面
+            document.getElementById('quizSection').style.display = 'none';
+            document.getElementById('resultSection').style.display = 'block';
+            
+            // 滚动到顶部
+            window.scrollTo(0, 0);
+        }
+
+        // 重新开始
+        function restartQuiz() {
+            clearInterval(timerInterval);
+            currentQuestions = [];
+            userAnswers = {};
+            seconds = 0;
+
+            document.getElementById('resultSection').style.display = 'none';
+            document.getElementById('loginSection').style.display = 'block';
+            
+            document.getElementById('username').value = '';
+            document.getElementById('department').value = '';
+            document.getElementById('employeeId').value = '';
+        }
+    </script>
+</body>
+</html>
